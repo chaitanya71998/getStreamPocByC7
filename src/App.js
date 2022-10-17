@@ -1,4 +1,6 @@
 import React from "react";
+import { observer, } from 'mobx-react'
+import { observable } from 'mobx'
 import {
   StreamApp,
   NotificationDropdown,
@@ -17,9 +19,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBloggerB } from "@fortawesome/free-brands-svg-icons";
 import "./styles.css";
+import { withRouter } from 'react-router-dom'
 
+@observer
 class App extends React.Component {
+
   render() {
+    console.log(this.props.match.params.user_id)
     return (
       <StreamApp
         apiKey="5nr74n2ybm7z"
@@ -63,4 +69,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
