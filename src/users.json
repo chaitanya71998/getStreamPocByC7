@@ -6,5 +6,9 @@
   "issac": {
     "id": "Issac",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiSXNzYWMifQ.brdMelOop5ASr6s_x88amvC2uXfK_CpH6-s1q7yBJck"
+  },
+  "learning": {
+    "id": "learning",
+    "token": ""
   }
 }

@@ -6,13 +6,16 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "7.19.3",
     "@fortawesome/free-brands-svg-icons": "5.13.0",
     "@fortawesome/free-solid-svg-icons": "5.13.0",
     "@fortawesome/react-fontawesome": "0.1.9",
     "babel-runtime": "6.26.0",
     "bulma": "0.8.2",
     "get-stream": "5.1.0",
+    "getstream": "^8.0.1",
     "gh-pages": "4.0.0",
+    "linkifyjs": "^2.1.9",
     "mobx": "5.15.0",
     "mobx-react": "6.1.4",
     "react": "16.12.0",
@@ -23,7 +26,8 @@
   },
   "devDependencies": {
     "gh-pages": "4.0.0",
-    "typescript": "3.8.3"
+    "typescript": "3.8.3",
+    "@babel/plugin-proposal-decorators": "7.19.3"
   },
   "scripts": {
     "predeploy": "npm run build",
