@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch } from 'react-router-dom'
 import { Route } from 'react-router'
 
 import { createBrowserHistory } from 'history'
+import Home from "./Home";
 const history = createBrowserHistory()
 
 
@@ -15,7 +16,7 @@ ReactDOM.render(
     <Router>
       <Switch>
         <Route path={'/:user_id'} component={App} />
-        <Route path={'/'} component={<>Home</>} />
+        <Route path={'/'} component={Home} />
       </Switch>
     </Router>
   </React.StrictMode>,
