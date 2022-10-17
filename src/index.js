@@ -15,6 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
+        <Route path={'/getStreamPocByC7'} component={Home} />
         <Route path={'/:user_id'} component={App} />
         <Route path={'/'} component={Home} />
       </Switch>
