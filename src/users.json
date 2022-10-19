@@ -10,5 +10,21 @@
   "learning": {
     "id": "learning",
     "token": ""
+  },
+  "test": {
+    "id": "test",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdCJ9.sbH_Oq-rFMqVURaExRq1ipkbT9ZNrtNJtHp4bGV6FZo"
+  },
+  "eric": {
+    "id": "eric",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZXJpYyJ9.hniqY_sNzs1uyI8A_2PVseg3RyP9spMzsMA3qtUvDwE"
+  },
+  "jessica": {
+    "id": "jessica",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamVzc2ljYSJ9.WtPjAaionMSGBqArkgegOLk8XdU63db4-UiGMLgAQ3o"
+  },
+  "jule": {
+    "id": "jule",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiamVzc2ljYSJ9.WtPjAaionMSGBqArkgegOLk8XdU63db4-UiGMLgAQ3o"
   }
 }
