@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   StreamApp,
   NotificationDropdown,
@@ -7,107 +7,190 @@ import {
   LikeButton,
   CommentField,
   CommentList,
-  StatusUpdateForm, Title
-} from "react-activity-feed";
-import "react-activity-feed/dist/index.css";
-import "./styles.css";
-import { withRouter } from 'react-router-dom'
-import usersData from './users.json'
-import { observer } from "mobx-react";
-import { observable } from "mobx";
-import { addHashTagsAndMentionsFeeds } from "./utils/textUtils";
-import { StreamClient } from "getstream";
+  StatusUpdateForm,
+  Title,
+} from "react-activity-feed"
+import "react-activity-feed/dist/index.css"
+import "./styles.css"
+import { withRouter } from "react-router-dom"
+import usersData from "./users.json"
+import { observer } from "mobx-react"
+import { observable } from "mobx"
+import { getActivitiesToBeUpdatedList } from "./utils/textUtils"
+import { StreamClient } from "getstream"
+import { API_KEY, APP_ID } from "./Constants/envVariables"
+import { FlexDiv } from "./Components/styledComponents"
+import { FollowersAndFollowings } from "./Components/FollowersAndFollowings"
 
-const API_KEY = "5nr74n2ybm7z"
-const APP_ID = "1215105"
-
+@observer
 class App extends React.Component {
   client
-
+  remoteClient
+  token
+  id
+  @observable followers
+  @observable followings
   componentDidMount() {
     this.client = new StreamClient(API_KEY, this.getUserToken(), APP_ID)
   }
 
-
   getUserToken = () => {
-    // console.log(this.props.match.params.user_id, usersData[this.props.match.params.user_id]?.token)
     return usersData[this.props.match.params.user_id]?.token
   }
 
   getUserName = () => {
-    // console.log(this.props.match.params.user_id, usersData[this.props.match.params.user_id]?.id)
     return usersData[this.props.match.params.user_id]?.id
   }
 
-
-  onClickHashtag = (word) => {
-
-    // createAndNavigateToHashtag(this.props.history, word)
-  }
-
-  onModifyActivityData = (props) => {
-    console.log(props, 'onModifyActivityData')
-  }
-
-  onSuccessUpdateStatus = (props) => {
-    addHashTagsAndMentionsFeeds(this.client, props)
-    console.log(props, "onSuccessUpdateStatus")
-  }
-
-  onTrigger = (props) => {
-    console.log(props, "onTrigger")
-  }
-
   onClickMention = (word) => {
-    console.log(word, "mention")
+    this.props.history.push(`/${word}`)
   }
-  onClickHashtag = (word) => {
-    console.log(word, "hashtag")
 
+  onClickHashtag = (word) => {
+    this.props.history.push(`/hashtag/${word}`)
   }
-  render() {
-    const token = this.getUserToken() ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
-    const id = this.getUserName() ?? 'Chaitanya'
+
+  renderTimelineFeed = () => {
+    const token =
+      this.getUserToken() ??
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
     return (
       <>
-        <Title size={20}>I am {id}</Title>
-        <StreamApp
-          apiKey={API_KEY}
-          appId={APP_ID}
-          token={token}
-        >
-          <NotificationDropdown notify />
-          <div>
-            <StatusUpdateForm feedGroup="timeline" userId={id} onSuccess={this.onSuccessUpdateStatus} trigger={this.onTrigger} />
-          </div>
+        <Title>{this.getUserName() ?? "Chaitanya"} Timeline</Title>
+        <br />
+        <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
           <FlatFeed
             notify
+            feedGroup={"timeline"}
             Activity={(props) => {
-              console.log(props)
-              return (<Activity
-                {...props}
-                onClickHashtag={this.onClickHashtag}
-                onClickMention={this.onClickMention}
-                Footer={() => (
-                  <div style={{ padding: "6px 8px" }}>
-                    <LikeButton {...props} />
-                    <CommentField
-                      activity={props.activity}
-                      onAddReaction={props.onAddReaction}
-                    />
+              return (
+                <Activity
+                  {...props}
+                  onClickHashtag={this.onClickHashtag}
+                  onClickMention={this.onClickMention}
+                  Footer={() => (
                     <div style={{ padding: "6px 8px" }}>
-                      <CommentList activityId={props.activity.id} />
+                      <LikeButton {...props} />
+                      <CommentField
+                        activity={props.activity}
+                        onAddReaction={props.onAddReaction}
+                      />
+                      <div style={{ padding: "6px 8px" }}>
+                        <CommentList activityId={props.activity.id} />
+                      </div>
                     </div>
-                  </div>
-                )}
-              />)
-            }
-            }
+                  )}
+                />
+              )
+            }}
           />
         </StreamApp>
       </>
-    );
+    )
+  }
+
+  renderAggregatedFeed = () => {
+    const token =
+      this.getUserToken() ??
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
+    return (
+      <>
+        <Title>{this.getUserName() ?? "Chaitanya"} Aggregated Feed</Title>
+        <br />
+        <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
+          <FlatFeed
+            notify
+            feedGroup={"hashtags"}
+            userId={"chaitanya"}
+            Activity={(props) => {
+              return (
+                <Activity
+                  {...props}
+                  onClickHashtag={this.onClickHashtag}
+                  Footer={() => (
+                    <div style={{ padding: "6px 8px" }}>
+                      <LikeButton {...props} />
+                      <CommentField
+                        activity={props.activity}
+                        onAddReaction={props.onAddReaction}
+                      />
+                      <div style={{ padding: "6px 8px" }}>
+                        <CommentList activityId={props.activity.id} />
+                      </div>
+                    </div>
+                  )}
+                />
+              )
+            }}
+          />
+        </StreamApp>
+      </>
+    )
+  }
+  renderFeeds = () => {
+    return (
+      <>
+        {/* {this.renderAggregatedFeed()} */}
+        {this.renderTimelineFeed()}
+      </>
+    )
+  }
+
+  renderFollowers = () => {}
+
+  renderFollowings = () => {}
+
+  renderOtherUsers = () => {}
+
+  render() {
+    const token =
+      this.getUserToken() ??
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
+    const id = this.getUserName() ?? "Chaitanya"
+    return (
+      <>
+        <button onClick={this.onClickUser}>addUSer</button>
+        <br />
+        <Title size={20}>I am {id}</Title>
+        <br />
+        <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
+          <NotificationDropdown notify />
+          <br />
+          <FollowersAndFollowings
+            history={this.props.history}
+            userToken={token}
+            username={id}
+          />
+          <FlexDiv>
+            <StatusUpdateForm
+              Header={<Title>Want to Post you activity</Title>}
+              feedGroup="timeline"
+              userId={id}
+              onSuccess={this.onSuccessUpdateStatus}
+              trigger={this.onTrigger}
+              modifyActivityData={(activity) => {
+                let additionalFeedTargets = [
+                  "notification:Issac",
+                  "notification:Chaitanya",
+                ]
+                let targetFields = getActivitiesToBeUpdatedList(activity)
+                if (targetFields.length) {
+                  additionalFeedTargets.push(...targetFields)
+                }
+                return {
+                  ...activity,
+                  to: additionalFeedTargets,
+                }
+              }}
+            />
+            {this.renderOtherUsers()}
+          </FlexDiv>
+        </StreamApp>
+        <br />
+        {this.renderFeeds()}
+      </>
+    )
   }
 }
 
-export default withRouter(App);
+export default withRouter(App)

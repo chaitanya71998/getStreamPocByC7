@@ -8,6 +8,8 @@ class Home extends React.Component {
                 <Link to={'/chaitanya'} exact={true} >Chaitanya</Link>
                 <br />
                 <Link to={'/issac'} exact={true} >Issac</Link>
+                <br />
+                <Link to={'/eric'} exact={true} >eric</Link>
             </>
         )
     }

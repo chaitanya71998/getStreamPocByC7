@@ -7,6 +7,7 @@ import { Route } from 'react-router'
 
 import { createBrowserHistory } from 'history'
 import Home from "./Home";
+import HashTagFeed from "./HashTagFeed";
 const history = createBrowserHistory()
 
 
@@ -15,7 +16,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
+
         <Route path={'/getStreamPocByC7'} component={Home} />
+        <Route path={'/hashtag/:hash_tag'} component={HashTagFeed} />
         <Route path={'/:user_id'} component={App} />
         <Route path={'/'} component={Home} />
       </Switch>
