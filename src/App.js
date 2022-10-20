@@ -21,15 +21,16 @@ import { StreamClient } from "getstream"
 import { API_KEY, APP_ID } from "./Constants/envVariables"
 import { FlexDiv } from "./Components/styledComponents"
 import { FollowersAndFollowings } from "./Components/FollowersAndFollowings"
+import { TimeLineFeeds } from "./Components/TimelineFeeds"
+import { AggregatedFeeds } from "./Components/AggregatedFeeds"
+import { StatusForm } from "./Components/StatusForm"
+import { MentionedFeeds } from "./Components/MentionedFeeds"
+import { AllFeeds } from "./Components/AllFeeds"
 
 @observer
 class App extends React.Component {
   client
-  remoteClient
-  token
-  id
-  @observable followers
-  @observable followings
+
   componentDidMount() {
     this.client = new StreamClient(API_KEY, this.getUserToken(), APP_ID)
   }
@@ -43,50 +44,11 @@ class App extends React.Component {
   }
 
   onClickMention = (word) => {
-    this.props.history.push(`/${word}`)
+    this.props.history.push(`/${word.toLowerCase()}?mentions=true`)
   }
 
   onClickHashtag = (word) => {
     this.props.history.push(`/hashtag/${word}`)
-  }
-
-  renderTimelineFeed = () => {
-    const token =
-      this.getUserToken() ??
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
-    return (
-      <>
-        <Title>{this.getUserName() ?? "Chaitanya"} Timeline</Title>
-        <br />
-        <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
-          <FlatFeed
-            notify
-            feedGroup={"timeline"}
-            Activity={(props) => {
-              return (
-                <Activity
-                  {...props}
-                  onClickHashtag={this.onClickHashtag}
-                  onClickMention={this.onClickMention}
-                  Footer={() => (
-                    <div style={{ padding: "6px 8px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <div style={{ padding: "6px 8px" }}>
-                        <CommentList activityId={props.activity.id} />
-                      </div>
-                    </div>
-                  )}
-                />
-              )
-            }}
-          />
-        </StreamApp>
-      </>
-    )
   }
 
   renderAggregatedFeed = () => {
@@ -95,58 +57,24 @@ class App extends React.Component {
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
     return (
       <>
-        <Title>{this.getUserName() ?? "Chaitanya"} Aggregated Feed</Title>
-        <br />
-        <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
-          <FlatFeed
-            notify
-            feedGroup={"hashtags"}
-            userId={"chaitanya"}
-            Activity={(props) => {
-              return (
-                <Activity
-                  {...props}
-                  onClickHashtag={this.onClickHashtag}
-                  Footer={() => (
-                    <div style={{ padding: "6px 8px" }}>
-                      <LikeButton {...props} />
-                      <CommentField
-                        activity={props.activity}
-                        onAddReaction={props.onAddReaction}
-                      />
-                      <div style={{ padding: "6px 8px" }}>
-                        <CommentList activityId={props.activity.id} />
-                      </div>
-                    </div>
-                  )}
-                />
-              )
-            }}
-          />
-        </StreamApp>
+        <AggregatedFeeds
+          history={this.props.history}
+          userToken={token}
+          username={this.getUserName()}
+          onClickHashtag={this.onClickHashtag}
+          onClickMention={this.onClickMention}
+        />
       </>
     )
   }
-  renderFeeds = () => {
-    return (
-      <>
-        {/* {this.renderAggregatedFeed()} */}
-        {this.renderTimelineFeed()}
-      </>
-    )
-  }
-
-  renderFollowers = () => {}
-
-  renderFollowings = () => {}
-
-  renderOtherUsers = () => {}
 
   render() {
     const token =
       this.getUserToken() ??
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
     const id = this.getUserName() ?? "Chaitanya"
+    console.log(this.props)
+    const searchParams = new URLSearchParams(this.props.location.search)
     return (
       <>
         <Title size={20}>I am {id}</Title>
@@ -159,33 +87,16 @@ class App extends React.Component {
             userToken={token}
             username={id}
           />
-          <FlexDiv>
-            <StatusUpdateForm
-              Header={<Title>Want to Post you activity</Title>}
-              feedGroup="timeline"
-              userId={id}
-              onSuccess={this.onSuccessUpdateStatus}
-              trigger={this.onTrigger}
-              modifyActivityData={(activity) => {
-                let additionalFeedTargets = [
-                  "notification:Issac",
-                  "notification:Chaitanya",
-                ]
-                let targetFields = getActivitiesToBeUpdatedList(activity)
-                if (targetFields.length) {
-                  additionalFeedTargets.push(...targetFields)
-                }
-                return {
-                  ...activity,
-                  to: additionalFeedTargets,
-                }
-              }}
-            />
-            {this.renderOtherUsers()}
-          </FlexDiv>
+
+          <AllFeeds
+            history={this.props.history}
+            userToken={token}
+            username={this.getUserName()}
+            onClickHashtag={this.onClickHashtag}
+            onClickMention={this.onClickMention}
+            shouldShowMentions={searchParams.get("mentions") === "true"}
+          />
         </StreamApp>
-        <br />
-        {this.renderFeeds()}
       </>
     )
   }

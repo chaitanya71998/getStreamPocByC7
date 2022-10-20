@@ -79,7 +79,7 @@ export const getHashTagsAndMentionsFeeds = (activity) => {
 export const getActivitiesToBeUpdatedList = (
   activity,
   hashTagGroup = "hashtags",
-  timeline = "timeline"
+  timeline = "mentions"
 ) => {
   let a = getHashTagsAndMentionsFeeds(activity)
   let toField = []
