@@ -149,8 +149,6 @@ class App extends React.Component {
     const id = this.getUserName() ?? "Chaitanya"
     return (
       <>
-        <button onClick={this.onClickUser}>addUSer</button>
-        <br />
         <Title size={20}>I am {id}</Title>
         <br />
         <StreamApp apiKey={API_KEY} appId={APP_ID} token={token}>
