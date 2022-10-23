@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 
 import { API_KEY, APP_ID } from "../Constants/envVariables"
 import {
   StreamApp,
-  NotificationDropdown,
   FlatFeed,
   Activity,
   LikeButton,
   CommentField,
   CommentList,
-  StatusUpdateForm,
   Title,
 } from "react-activity-feed"
+import { CustomCommentItem } from "./CustomCommentItem"
+
+import { StreamClient } from "getstream"
+
 export const TimeLineFeeds = ({
-  history,
   username,
   userToken,
   onClickHashtag,
   onClickMention,
 }) => {
+  const client = new StreamClient(API_KEY, userToken, APP_ID)
+
   return (
     <>
       <Title>{username ?? "Chaitanya"} Timeline</Title>
@@ -41,7 +44,14 @@ export const TimeLineFeeds = ({
                       onAddReaction={props.onAddReaction}
                     />
                     <div style={{ padding: "6px 8px" }}>
-                      <CommentList activityId={props.activity.id} />
+                      <CommentList
+                        activityId={props.activity.id}
+                        CommentItem={(props) => {
+                          return (
+                            <CustomCommentItem client={client} {...props} />
+                          )
+                        }}
+                      />
                     </div>
                   </div>
                 )}

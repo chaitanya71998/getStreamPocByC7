@@ -13,9 +13,11 @@ export const StatusForm = ({ userName }) => {
         modifyActivityData={(activity) => {
           let additionalFeedTargets = []
           let targetFields = getActivitiesToBeUpdatedList(activity)
+
           if (targetFields.length) {
             additionalFeedTargets.push(...targetFields)
           }
+          activity.foreign_id = `timeline:${userName}-${new Date().getTime()}`
           return {
             ...activity,
             to: additionalFeedTargets,
