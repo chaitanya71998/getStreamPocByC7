@@ -1,31 +1,15 @@
 import React from "react"
-import {
-  StreamApp,
-  NotificationDropdown,
-  FlatFeed,
-  Activity,
-  LikeButton,
-  CommentField,
-  CommentList,
-  StatusUpdateForm,
-  Title,
-} from "react-activity-feed"
+import { StreamApp, NotificationDropdown, Title } from "react-activity-feed"
 import "react-activity-feed/dist/index.css"
 import "./styles.css"
 import { withRouter } from "react-router-dom"
-import usersData from "./users.json"
 import { observer } from "mobx-react"
-import { observable } from "mobx"
-import { getActivitiesToBeUpdatedList } from "./utils/textUtils"
 import { StreamClient } from "getstream"
 import { API_KEY, APP_ID } from "./Constants/envVariables"
-import { FlexDiv } from "./Components/styledComponents"
 import { FollowersAndFollowings } from "./Components/FollowersAndFollowings"
-import { TimeLineFeeds } from "./Components/TimelineFeeds"
 import { AggregatedFeeds } from "./Components/AggregatedFeeds"
-import { StatusForm } from "./Components/StatusForm"
-import { MentionedFeeds } from "./Components/MentionedFeeds"
 import { AllFeeds } from "./Components/AllFeeds"
+import { getLocalUserName, getLocalUserToken } from "./utils/localStorage"
 
 @observer
 class App extends React.Component {
@@ -36,11 +20,11 @@ class App extends React.Component {
   }
 
   getUserToken = () => {
-    return usersData[this.props.match.params.user_id]?.token
+    return getLocalUserToken()
   }
 
   getUserName = () => {
-    return usersData[this.props.match.params.user_id]?.id
+    return getLocalUserName()
   }
 
   onClickMention = (word) => {
@@ -73,7 +57,6 @@ class App extends React.Component {
       this.getUserToken() ??
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
     const id = this.getUserName() ?? "Chaitanya"
-    console.log(this.props)
     const searchParams = new URLSearchParams(this.props.location.search)
     return (
       <>

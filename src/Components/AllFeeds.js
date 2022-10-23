@@ -54,7 +54,7 @@ export const AllFeeds = ({
   const renderFeedActivities = () => {
     return (
       <>
-        <StatusForm />
+        <StatusForm userName={username} />
         <br />
         {renderTimelineFeeds()}
       </>

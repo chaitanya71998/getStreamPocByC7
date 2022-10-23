@@ -22,6 +22,7 @@ export const TimeLineFeeds = ({
 }) => {
   const client = new StreamClient(API_KEY, userToken, APP_ID)
 
+  const onClickLike = (props) => {}
   return (
     <>
       <Title>{username ?? "Chaitanya"} Timeline</Title>
@@ -36,25 +37,33 @@ export const TimeLineFeeds = ({
                 {...props}
                 onClickHashtag={onClickHashtag}
                 onClickMention={onClickMention}
-                Footer={() => (
-                  <div style={{ padding: "6px 8px" }}>
-                    <LikeButton {...props} />
-                    <CommentField
-                      activity={props.activity}
-                      onAddReaction={props.onAddReaction}
-                    />
+                Footer={() => {
+                  return (
                     <div style={{ padding: "6px 8px" }}>
-                      <CommentList
-                        activityId={props.activity.id}
-                        CommentItem={(props) => {
-                          return (
-                            <CustomCommentItem client={client} {...props} />
-                          )
+                      <div
+                        onClick={() => {
+                          onClickLike(props)
                         }}
+                      >
+                        <LikeButton {...props} />
+                      </div>
+                      <CommentField
+                        activity={props.activity}
+                        onAddReaction={props.onAddReaction}
                       />
+                      <div style={{ padding: "6px 8px" }}>
+                        <CommentList
+                          activityId={props.activity.id}
+                          CommentItem={(props) => {
+                            return (
+                              <CustomCommentItem client={client} {...props} />
+                            )
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )
+                }}
               />
             )
           }}

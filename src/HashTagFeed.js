@@ -14,6 +14,7 @@ import { withRouter } from "react-router-dom"
 import { observer } from "mobx-react"
 import { observable } from "mobx"
 import { API_KEY, APP_ID } from "./Constants/envVariables"
+import { getLocalUserToken } from "./utils/localStorage"
 
 @observer
 class HashTagFeed extends React.Component {
@@ -35,8 +36,7 @@ class HashTagFeed extends React.Component {
 
   render() {
     // token here can be the user logged in
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
+    const token = getLocalUserToken()
     const id = this.getHash_tag()
     return (
       <>

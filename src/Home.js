@@ -1,18 +1,21 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
+import { getLocalUserName } from "./utils/localStorage"
 
 class Home extends React.Component {
-    render() {
-        return (
-            <>
-                <Link to={'/chaitanya'} exact={true} >Chaitanya</Link>
-                <br />
-                <Link to={'/issac'} exact={true} >Issac</Link>
-                <br />
-                <Link to={'/eric'} exact={true} >eric</Link>
-            </>
-        )
-    }
+  render() {
+    return (
+      <>
+        <Link to={`/timeline`} exact={true}>
+          got to{getLocalUserName()} timeline?
+        </Link>
+        <br />
+        <Link to={`/personalizedFeed`} exact={true}>
+          got to{getLocalUserName()} personalized?
+        </Link>
+      </>
+    )
+  }
 }
 
 export default Home
