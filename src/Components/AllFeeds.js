@@ -13,6 +13,7 @@ import {
 import { MentionedFeeds } from "./MentionedFeeds"
 import { StatusForm } from "./StatusForm"
 import { TimeLineFeeds } from "./TimelineFeeds"
+import { AggregatedFeeds } from "./AggregatedFeeds"
 
 export const AllFeeds = ({
   history,
@@ -51,12 +52,17 @@ export const AllFeeds = ({
     )
   }
 
+  const renderAggregated = () => {
+    return <AggregatedFeeds />
+  }
+
   const renderFeedActivities = () => {
     return (
       <>
         <StatusForm userName={username} />
         <br />
         {renderTimelineFeeds()}
+        {renderAggregated()}
       </>
     )
   }

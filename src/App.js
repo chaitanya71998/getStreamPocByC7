@@ -7,7 +7,6 @@ import { observer } from "mobx-react"
 import { StreamClient } from "getstream"
 import { API_KEY, APP_ID } from "./Constants/envVariables"
 import { FollowersAndFollowings } from "./Components/FollowersAndFollowings"
-import { AggregatedFeeds } from "./Components/AggregatedFeeds"
 import { AllFeeds } from "./Components/AllFeeds"
 import { getLocalUserName, getLocalUserToken } from "./utils/localStorage"
 
@@ -33,23 +32,6 @@ class App extends React.Component {
 
   onClickHashtag = (word) => {
     this.props.history.push(`/hashtag/${word}`)
-  }
-
-  renderAggregatedFeed = () => {
-    const token =
-      this.getUserToken() ??
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiQ2hhaXRhbnlhIn0.qQ9mi3MujuS0UpN8ipwsrujuZ3HQsJBTXufcKyOwJl8"
-    return (
-      <>
-        <AggregatedFeeds
-          history={this.props.history}
-          userToken={token}
-          username={this.getUserName()}
-          onClickHashtag={this.onClickHashtag}
-          onClickMention={this.onClickMention}
-        />
-      </>
-    )
   }
 
   render() {

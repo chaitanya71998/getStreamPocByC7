@@ -50,6 +50,7 @@ export const TimeLineFeeds = ({
                       <CommentField
                         activity={props.activity}
                         onAddReaction={props.onAddReaction}
+                        targetFeeds={[`user_activities:${username}`]}
                       />
                       <div style={{ padding: "6px 8px" }}>
                         <CommentList
